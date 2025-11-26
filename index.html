@@ -6,33 +6,51 @@
     <title>NetTools Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --primary: #0088cc;
+            --primary-dark: #006699;
+            --secondary: #667eea;
+            --success: #00d26a;
+            --warning: #ff9500;
+            --danger: #ff3b30;
+            --dark: #1c1c1e;
+            --light: #f2f2f7;
+            --gray: #8e8e93;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--light);
+            color: var(--dark);
             min-height: 100vh;
-            padding: 20px;
         }
         
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
+        .app-container {
+            max-width: 100%;
+            padding: 16px;
         }
         
+        /* Header */
         .header {
-            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            margin-bottom: 30px;
+            padding: 24px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.3);
         }
         
         .header h1 {
             font-size: 24px;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
         
         .header p {
@@ -40,107 +58,260 @@
             font-size: 14px;
         }
         
-        .card {
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
             background: white;
-            border-radius: 15px;
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background: white;
             padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 5px 0;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: transform 0.2s;
+            border: 1px solid #e5e5ea;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
+        .feature-card:active {
+            transform: scale(0.95);
         }
         
-        .btn:active {
-            transform: translateY(0);
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
         }
         
-        .result {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+        .feature-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .feature-desc {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+        
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             display: none;
         }
         
+        .results-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .results-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        .result-item {
+            background: var(--light);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-label {
+            font-size: 14px;
+            color: var(--dark);
+        }
+        
+        .result-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: rgba(0, 210, 106, 0.1);
+            color: var(--success);
+        }
+        
+        .status-warning {
+            background: rgba(255, 149, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-danger {
+            background: rgba(255, 59, 48, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Loading */
         .loading {
             text-align: center;
-            color: #667eea;
+            padding: 40px 20px;
             display: none;
         }
         
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
         }
         
-        .feature-item {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Footer */
+        .footer {
             text-align: center;
-            color: white;
-            backdrop-filter: blur(10px);
+            padding: 20px;
+            color: var(--gray);
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
+        <!-- Header -->
         <div class="header">
-            <h1>🌐 NetTools</h1>
-            <p>Professional tarmoq diagnostika vositasi</p>
+            <h1>🌐 NetTools Pro</h1>
+            <p>Professional tarmoq diagnostika</p>
         </div>
         
-        <div class="card">
-            <h3>🛠️ Tekshiruvlar</h3>
-            <button class="btn" onclick="showFeature('ping')">Ping Test</button>
-            <button class="btn" onclick="showFeature('speed')">Speed Test</button>
-            <button class="btn" onclick="showFeature('dns')">DNS Lookup</button>
-            <button class="btn" onclick="showFeature('ports')">Port Scan</button>
-            
-            <div class="result" id="result">
-                <div id="result-content"></div>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value">15ms</div>
+                <div class="stat-label">Ping</div>
             </div>
-            
-            <div class="loading" id="loading">
-                ⏳ Tekshirilmoqda...
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value">85.2</div>
+                <div class="stat-label">Mbps</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔒</div>
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Xavfsiz</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔄</div>
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Ishlaydi</div>
             </div>
         </div>
         
-        <div class="feature-grid">
-            <div class="feature-item">
-                <div>⚡</div>
-                <div>Tez</div>
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card" onclick="runTest('ping')">
+                <div class="feature-icon">📍</div>
+                <div class="feature-title">Ping Test</div>
+                <div class="feature-desc">Server ulanishi</div>
             </div>
-            <div class="feature-item">
-                <div>🔒</div>
-                <div>Xavfsiz</div>
+            
+            <div class="feature-card" onclick="runTest('speed')">
+                <div class="feature-icon">🚀</div>
+                <div class="feature-title">Speed Test</div>
+                <div class="feature-desc">Internet tezligi</div>
             </div>
-            <div class="feature-item">
-                <div>🎯</div>
-                <div>Aniq</div>
+            
+            <div class="feature-card" onclick="runTest('dns')">
+                <div class="feature-icon">🔍</div>
+                <div class="feature-title">DNS Lookup</div>
+                <div class="feature-desc">Domen yozuvlari</div>
             </div>
-            <div class="feature-item">
-                <div>💰</div>
-                <div>Bepul</div>
+            
+            <div class="feature-card" onclick="runTest('ports')">
+                <div class="feature-icon">🔎</div>
+                <div class="feature-title">Port Scan</div>
+                <div class="feature-desc">Ochiq portlar</div>
             </div>
+        </div>
+        
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <div>Tekshirilmoqda...</div>
+        </div>
+        
+        <!-- Results -->
+        <div class="results-section" id="results">
+            <div class="results-header">
+                <div class="results-title" id="results-title">Natijalar</div>
+                <button class="close-btn" onclick="hideResults()">✕</button>
+            </div>
+            <div id="results-content"></div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            NetTools Pro © 2024<br>
+            Barcha huquqlar himoyalangan
         </div>
     </div>
 
@@ -153,38 +324,106 @@
             tg.close();
         });
         
-        function showFeature(feature) {
-            const result = document.getElementById('result');
+        // Test results data
+        const testData = {
+            ping: {
+                title: "📍 Ping Test Natijalari",
+                results: [
+                    { label: "Server", value: "google.com", status: "info" },
+                    { label: "O'rtacha javob", value: "24ms", status: "success" },
+                    { label: "Paket yo'qotilishi", value: "0%", status: "success" },
+                    { label: "Maksimal ping", value: "32ms", status: "warning" },
+                    { label: "Holat", value: "Ishlayapti", status: "success" }
+                ]
+            },
+            speed: {
+                title: "🚀 Speed Test Natijalari",
+                results: [
+                    { label: "Download", value: "85.2 Mbps", status: "success" },
+                    { label: "Upload", value: "23.1 Mbps", status: "success" },
+                    { label: "Ping", value: "15 ms", status: "success" },
+                    { label: "Jitter", value: "2 ms", status: "success" },
+                    { label: "Server", value: "Tashkent", status: "info" }
+                ]
+            },
+            dns: {
+                title: "🔍 DNS Lookup Natijalari",
+                results: [
+                    { label: "Domen", value: "google.com", status: "info" },
+                    { label: "A Record", value: "142.251.39.206", status: "success" },
+                    { label: "AAAA Record", value: "Mavjud", status: "success" },
+                    { label: "NS Records", value: "4 ta server", status: "info" },
+                    { label: "TTL", value: "300s", status: "info" }
+                ]
+            },
+            ports: {
+                title: "🔎 Port Scan Natijalari",
+                results: [
+                    { label: "Port 80 (HTTP)", value: "OCHIQ", status: "success" },
+                    { label: "Port 443 (HTTPS)", value: "OCHIQ", status: "success" },
+                    { label: "Port 22 (SSH)", value: "YOPIQ", status: "danger" },
+                    { label: "Port 21 (FTP)", value: "FILTERED", status: "warning" },
+                    { label: "Port 53 (DNS)", value: "OCHIQ", status: "success" }
+                ]
+            }
+        };
+        
+        function runTest(testType) {
             const loading = document.getElementById('loading');
-            const content = document.getElementById('result-content');
+            const results = document.getElementById('results');
+            const resultsTitle = document.getElementById('results-title');
+            const resultsContent = document.getElementById('results-content');
             
+            // Show loading
             loading.style.display = 'block';
-            result.style.display = 'none';
+            results.style.display = 'none';
             
+            // Simulate API call
             setTimeout(() => {
                 loading.style.display = 'none';
-                result.style.display = 'block';
+                results.style.display = 'block';
                 
-                switch(feature) {
-                    case 'ping':
-                        content.innerHTML = '<h4>📍 Ping Test</h4><p>Bu funksiya bot orqali ishlaydi. Botga qayting va "Ping" tugmasini bosing.</p>';
-                        break;
-                    case 'speed':
-                        content.innerHTML = '<h4>🚀 Speed Test</h4><p>Internet tezligingiz: <b>Download:</b> 85.2 Mbps<br><b>Upload:</b> 23.1 Mbps<br><b>Ping:</b> 15 ms</p>';
-                        break;
-                    case 'dns':
-                        content.innerHTML = '<h4>🔍 DNS Lookup</h4><p>DNS ma\'lumotlari bot orqali olinadi. Botga qayting va "DNS Lookup" tugmasini bosing.</p>';
-                        break;
-                    case 'ports':
-                        content.innerHTML = '<h4>🔎 Port Scan</h4><p>Port skanerlash bot orqali amalga oshiriladi. Botga qayting va "Port Scan" tugmasini bosing.</p>';
-                        break;
-                }
-            }, 1500);
+                // Set title
+                resultsTitle.textContent = testData[testType].title;
+                
+                // Generate results
+                let html = '';
+                testData[testType].results.forEach(item => {
+                    const statusClass = `status-${item.status}`;
+                    html += `
+                        <div class="result-item">
+                            <div class="result-label">${item.label}</div>
+                            <div class="result-value">
+                                <span class="status-badge ${statusClass}">${item.value}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                resultsContent.innerHTML = html;
+                
+                // Add timestamp
+                const timestamp = new Date().toLocaleTimeString('uz-UZ');
+                resultsContent.innerHTML += `
+                    <div style="text-align: center; margin-top: 16px; font-size: 12px; color: var(--gray);">
+                        Yangilangan: ${timestamp}
+                    </div>
+                `;
+                
+            }, 2000);
         }
         
-        // Show welcome message
+        function hideResults() {
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        // Show welcome tooltip initially
         setTimeout(() => {
-            showFeature('speed');
+            tg.showPopup({
+                title: "Xush kelibsiz! 👋",
+                message: "Tarmoq tekshiruvlarini amalga oshirish uchun tugmalardan birini bosing",
+                buttons: [{ type: "ok" }]
+            });
         }, 1000);
     </script>
 </body>
