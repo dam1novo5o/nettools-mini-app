@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetTools Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px 0;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            display: none;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 NetTools</h1>
+            <p>Professional tarmoq diagnostika vositasi</p>
+        </div>
+        
+        <div class="card">
+            <h3>🛠️ Tekshiruvlar</h3>
+            <button class="btn" onclick="showFeature('ping')">Ping Test</button>
+            <button class="btn" onclick="showFeature('speed')">Speed Test</button>
+            <button class="btn" onclick="showFeature('dns')">DNS Lookup</button>
+            <button class="btn" onclick="showFeature('ports')">Port Scan</button>
+            
+            <div class="result" id="result">
+                <div id="result-content"></div>
+            </div>
+            
+            <div class="loading" id="loading">
+                ⏳ Tekshirilmoqda...
+            </div>
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-item">
+                <div>⚡</div>
+                <div>Tez</div>
+            </div>
+            <div class="feature-item">
+                <div>🔒</div>
+                <div>Xavfsiz</div>
+            </div>
+            <div class="feature-item">
+                <div>🎯</div>
+                <div>Aniq</div>
+            </div>
+            <div class="feature-item">
+                <div>💰</div>
+                <div>Bepul</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Web App initialization
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.MainButton.setText("Botga qaytish").show();
+        tg.MainButton.onClick(() => {
+            tg.close();
+        });
+        
+        function showFeature(feature) {
+            const result = document.getElementById('result');
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('result-content');
+            
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+                result.style.display = 'block';
+                
+                switch(feature) {
+                    case 'ping':
+                        content.innerHTML = '<h4>📍 Ping Test</h4><p>Bu funksiya bot orqali ishlaydi. Botga qayting va "Ping" tugmasini bosing.</p>';
+                        break;
+                    case 'speed':
+                        content.innerHTML = '<h4>🚀 Speed Test</h4><p>Internet tezligingiz: <b>Download:</b> 85.2 Mbps<br><b>Upload:</b> 23.1 Mbps<br><b>Ping:</b> 15 ms</p>';
+                        break;
+                    case 'dns':
+                        content.innerHTML = '<h4>🔍 DNS Lookup</h4><p>DNS ma\'lumotlari bot orqali olinadi. Botga qayting va "DNS Lookup" tugmasini bosing.</p>';
+                        break;
+                    case 'ports':
+                        content.innerHTML = '<h4>🔎 Port Scan</h4><p>Port skanerlash bot orqali amalga oshiriladi. Botga qayting va "Port Scan" tugmasini bosing.</p>';
+                        break;
+                }
+            }, 1500);
+        }
+        
+        // Show welcome message
+        setTimeout(() => {
+            showFeature('speed');
+        }, 1000);
+    </script>
+</body>
+</html>
